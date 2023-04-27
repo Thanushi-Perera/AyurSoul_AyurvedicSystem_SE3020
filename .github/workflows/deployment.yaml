@@ -6,80 +6,53 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_USER_RUSIRU: ${{secrets.DOCKER_USER_RUSIRU}}
-  DOCKER_PASSWORD_RUSIRU: ${{secrets.DOCKER_PASSWORD_RUSIRU}}
-  ORDER_REPO_NAME_RUSIRU: ${{secrets.ORDER_REPO_NAME_RUSIRU}}
-  EMAIL_REPO_NAME_RUSIRU: ${{secrets.EMAIL_REPO_NAME_RUSIRU}}
-  DOCKER_USER_SENURA: ${{secrets.DOCKER_USER_SENURA}}
-  DOCKER_PASSWORD_SENURA: ${{secrets.DOCKER_PASSWORD_SENURA}}
-  CART_REPO_NAME_SENURA: ${{secrets.CART_REPO_NAME_SENURA}}
-  PRODUCT_REPO_NAME_SENURA: ${{secrets.PRODUCT_REPO_NAME_SENURA}}
-  DOCKER_USER_LASAL: ${{secrets.DOCKER_USER_LASAL}}
-  DOCKER_PASSWORD_LASAL: ${{secrets.DOCKER_PASSWORD_LASAL}}
-  AUTH_REPO_NAME_LASAL: ${{secrets.AUTH_REPO_NAME_LASAL}}
-  USER_REPO_NAME_LASAL: ${{secrets.USER_REPO_NAME_LASAL}}
-  DOCKER_USER_DILMI: ${{secrets.DOCKER_USER_DILMI}}
-  DOCKER_PASSWORD_DILMI: ${{secrets.DOCKER_PASSWORD_DILMI}}
-  DELIVERY_REPO_NAME_DILMI: ${{secrets.DELIVERY_REPO_NAME_DILMI}}
-  PAYMENT_REPO_NAME_DILMI: ${{secrets.PAYMENT_REPO_NAME_DILMI}}
+  DOCKER_USER_THANU: ${{secrets.DOCKER_USER_THANU}}
+  DOCKER_PASSWORD_THANU: ${{secrets.DOCKER_PASSWORD_THANU}}
+  ORDER_REPO_NAME_THANU: ${{secrets.ORDER_REPO_NAME_THANU}}
+  ORDER_REPO_PASSWORD_THANU: ${{secrets.ORDER_REPO_PASSWORD_THANU}}
+  DOCKER_USER_HIRUSHA: ${{secrets.DOCKER_USER_HIRUSHA}}
+  DOCKER_PASSWORD_HIRUSHA: ${{secrets.DOCKER_PASSWORD_HIRUSHA}}
+  DOCKER_REPO_NAME_HIRUSHA: ${{secrets.DOCKER_REPO_NAME_HIRUSHA}}
+  DOCKER_REPO_PASSWORD_HIRUSHA: ${{secrets.DOCKER_REPO_PASSWORD_HIRUSHA}}
+  DOCKER_USER_SHEHAN: ${{secrets.DOCKER_USER_SHEHAN}}
+  DOCKER_PASSWORD_SHEHAN: ${{secrets.DOCKER_PASSWORD_SHEHAN}}
+  DOCKER_REPO_NAME_SHEHAN: ${{secrets.DOCKER_REPO_NAME_SHEHAN}}
+  DOCKER_REPO_PASSWORD_SHEHAN: ${{secrets.DOCKER_REPO_PASSWORD_SHEHAN}}
+  DOCKER_USER_THISARA: ${{secrets.DOCKER_USER_THISARA}}
+  DOCKER_PASSWORD_THISARA: ${{secrets.DOCKER_PASSWORD_THISARA}}
+  DOCKER_REPO_NAME_THISARA: ${{secrets.DOCKER_REPO_NAME_THISARA}}
+  DOCKER_REPO_PASSWORD_THISARA: ${{secrets.DOCKER_REPO_PASSWORD_THISARA}}
 
 jobs:
-  order-service:
+
+  auth-service:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Docker login
-      run: | # Login to Dockerhub - Rusriu
-        docker login -u $DOCKER_USER_RUSIRU -p $DOCKER_PASSWORD_RUSIRU
-    - name: Build order service docker image
+      run: | # Login to Dockerhub - THANU
+        docker login -u $DOCKER_USER_THANU -p $DOCKER_PASSWORD_THANU
+    - name: Build auth service docker image
       run: |
-        cd src/order_service
-        docker build . --file Dockerfile --tag $DOCKER_USER_RUSIRU/$ORDER_REPO_NAME_RUSIRU:v1.0.1
-    - name: Push order service docker image
-      run: docker push $DOCKER_USER_RUSIRU/$ORDER_REPO_NAME_RUSIRU:v1.0.1
-  
-  email-service:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Docker login
-      run: | # Login to Dockerhub - Rusriu
-        docker login -u $DOCKER_USER_RUSIRU -p $DOCKER_PASSWORD_RUSIRU
-    - name: Build email service docker image
-      run: |
-        cd src/email_service
-        docker build . --file Dockerfile --tag $DOCKER_USER_RUSIRU/$EMAIL_REPO_NAME_RUSIRU:v1.0.0
-    - name: Push email service docker image
-      run: docker push $DOCKER_USER_RUSIRU/$EMAIL_REPO_NAME_RUSIRU:v1.0.0
+        cd src/auth_service
+        docker build . --file Dockerfile --tag $ORDER_REPO_NAME_THANU/$ORDER_REPO_PASSWORD_THANU:v1.0.4
+    - name: Push auth service docker image
+      run: docker push $DOCKER_USER_THANU/$ORDER_REPO_NAME_THANU:v1.0.4
 
   user-service:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Docker login
-      run: | # Login to Dockerhub - Rusriu
-        docker login -u $DOCKER_USER_LASAL -p $DOCKER_PASSWORD_LASAL
+      run: | # Login to Dockerhub - THANU
+        docker login -u $DOCKER_USER_THANU -p $DOCKER_PASSWORD_THANU
     - name: Build user service docker image
       run: |
         cd src/user_service
-        docker build . --file Dockerfile --tag $DOCKER_USER_LASAL/$USER_REPO_NAME_LASAL:v1.0.4
+        docker build . --file Dockerfile --tag $ORDER_REPO_NAME_THANU/$ORDER_REPO_PASSWORD_THANU:v1.0.4
     - name: Push user service docker image
-      run: docker push $DOCKER_USER_LASAL/$USER_REPO_NAME_LASAL:v1.0.4
+      run: docker push $DOCKER_USER_THANU/$ORDER_REPO_NAME_THANU:v1.0.4
   
-  auth-service:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Docker login
-      run: | # Login to Dockerhub - Rusriu
-        docker login -u $DOCKER_USER_LASAL -p $DOCKER_PASSWORD_LASAL
-    - name: Build auth service docker image
-      run: |
-        cd src/auth_service
-        docker build . --file Dockerfile --tag $DOCKER_USER_LASAL/$AUTH_REPO_NAME_LASAL:v1.0.4
-    - name: Push auth service docker image
-      run: docker push $DOCKER_USER_LASAL/$AUTH_REPO_NAME_LASAL:v1.0.4
-
   cart-service:
     runs-on: ubuntu-latest
     steps:
@@ -93,16 +66,30 @@ jobs:
         cd src/cart_service
         mvn clean package
     - name: Docker login
-      run: | # Login to Dockerhub - Senura
-        docker login -u $DOCKER_USER_SENURA -p $DOCKER_PASSWORD_SENURA
+      run: | # Login to Dockerhub - THISARA
+        docker login -u $DOCKER_USER_THISARA -p $DOCKER_PASSWORD_THISARA
     - name: Build cart service docker image
       run: |
         cd src/cart_service
-        docker build . --file Dockerfile --tag $DOCKER_USER_SENURA/$CART_REPO_NAME_SENURA:v1.0.2
+        docker build . --file Dockerfile --tag $DOCKER_REPO_NAME_THISARA/$DOCKER_REPO_PASSWORD_THISARA:v1.0.2
     - name: Push cart service docker image
-      run: docker push $DOCKER_USER_SENURA/$CART_REPO_NAME_SENURA:v1.0.2
-  
-  product-service:
+      run: docker push $DOCKER_USER_THISARA/$DOCKER_REPO_NAME_THISARA:v1.0.2
+
+  email-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker login
+      run: | # Login to Dockerhub - THISARA
+        docker login -u $DOCKER_USER_THISARA -p $DOCKER_PASSWORD_THISARA
+    - name: Build email service docker image
+      run: |
+        cd src/email_service
+        docker build . --file Dockerfile --tag $DOCKER_REPO_NAME_THISARA/$DOCKER_REPO_PASSWORD_THISARA:v1.0.0
+    - name: Push email service docker image
+      run: docker push $DOCKER_USER_THISARA/$DOCKER_REPO_NAME_THISARA:v1.0.0
+
+   product-service:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -115,37 +102,15 @@ jobs:
         cd src/product_service
         mvn clean package
     - name: Docker login
-      run: | # Login to Dockerhub - Senura
-        docker login -u $DOCKER_USER_SENURA -p $DOCKER_PASSWORD_SENURA
+      run: | # Login to Dockerhub - HIRUSHA
+        docker login -u $DOCKER_USER_HIRUSHA -p $DOCKER_PASSWORD_HIRUSHA
     - name: Build product service docker image
       run: |
         cd src/product_service
-        docker build . --file Dockerfile --tag $DOCKER_USER_SENURA/$PRODUCT_REPO_NAME_SENURA:v1.0.2
+        docker build . --file Dockerfile --tag $DOCKER_REPO_NAME_HIRUSHA/$DOCKER_REPO_PASSWORD_HIRUSHA:v1.0.2
     - name: Push cart service docker image
-      run: docker push $DOCKER_USER_SENURA/$PRODUCT_REPO_NAME_SENURA:v1.0.2
-
-  delivery-service:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Java version
-      uses: actions/setup-java@v1
-      with:
-        java-version: '1.8'
-    - name: Build with Maven
-      run: |
-        cd src/delivery_service
-        mvn clean package
-    - name: Docker login
-      run: | # Login to Dockerhub - Dilmi
-        docker login -u $DOCKER_USER_DILMI -p $DOCKER_PASSWORD_DILMI
-    - name: Build delivery service docker image
-      run: |
-        cd src/delivery_service
-        docker build . --file Dockerfile --tag $DOCKER_USER_DILMI/$DELIVERY_REPO_NAME_DILMI:latest
-    - name: Push cart service docker image
-      run: docker push $DOCKER_USER_DILMI/$DELIVERY_REPO_NAME_DILMI:latest
-
+      run: docker push $DOCKER_USER_HIRUSHA/$DOCKER_REPO_NAME_HIRUSHA:v1.0.2
+  
   payment-service:
     runs-on: ubuntu-latest
     steps:
@@ -159,14 +124,51 @@ jobs:
         cd src/payment_service
         mvn clean package
     - name: Docker login
-      run: | # Login to Dockerhub - Dilmi
-        docker login -u $DOCKER_USER_DILMI -p $DOCKER_PASSWORD_DILMI
+      run: | # Login to Dockerhub - HIRUSHA
+        docker login -u $DOCKER_USER_HIRUSHA -p $DOCKER_PASSWORD_HIRUSHA
     - name: Build payment service docker image
       run: |
         cd src/payment_service
-        docker build . --file Dockerfile --tag $DOCKER_USER_DILMI/$PAYMENT_REPO_NAME_DILMI:latest
+        docker build . --file Dockerfile --tag $DOCKER_REPO_NAME_HIRUSHA/$DOCKER_REPO_PASSWORD_HIRUSHA:latest
     - name: Push cart service docker image
-      run: docker push $DOCKER_USER_DILMI/$PAYMENT_REPO_NAME_DILMI:latest
+      run: docker push $DOCKER_USER_HIRUSHA/$DOCKER_REPO_NAME_HIRUSHA:latest
+  
+  delivery-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Java version
+      uses: actions/setup-java@v1
+      with:
+        java-version: '1.8'
+    - name: Build with Maven
+      run: |
+        cd src/delivery_service
+        mvn clean package
+    - name: Docker login
+      run: | # Login to Dockerhub - SHEHAN
+        docker login -u $DOCKER_USER_SHEHAN -p $DOCKER_PASSWORD_SHEHAN
+    - name: Build delivery service docker image
+      run: |
+        cd src/delivery_service
+        docker build . --file Dockerfile --tag $DELIVERY_REPO_NAME_SHEHAN/$DELIVERY_REPO_NAME_SHEHAN:latest
+    - name: Push cart service docker image
+      run: docker push $DOCKER_USER_SHEHAN/$DELIVERY_REPO_NAME_SHEHAN:latest
+
+  order-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker login
+      run: | # Login to Dockerhub - SHEHAN
+        docker login -u $DOCKER_USER_SHEHAN -p $DOCKER_PASSWORD_SHEHAN
+    - name: Build order service docker image
+      run: |
+        cd src/order_service
+        docker build . --file Dockerfile --tag $DELIVERY_REPO_NAME_SHEHAN/$DELIVERY_REPO_NAME_SHEHAN:v1.0.1
+    - name: Push order service docker image
+      run: docker push $DOCKER_USER_SHEHAN/$DELIVERY_REPO_NAME_SHEHAN:v1.0.1
+
   
   deploy:
     needs: [order-service, email-service, cart-service, product-service,user-service,auth-service,delivery-service,payment-service]
